@@ -150,13 +150,13 @@ export function Hero() {
                 transition={{ duration: 4, repeat: Infinity }}
                 className="absolute bottom-8 left-8 glass-card rounded-2xl p-4 flex items-center gap-4"
               >
-                <div className="w-12 h-12 rounded-full bg-green-100 flex items-center justify-center text-green-600">
+                {/* <div className="w-12 h-12 rounded-full bg-green-100 flex items-center justify-center text-green-600">
                   <Shield className="w-6 h-6" />
-                </div>
-                <div>
+                </div> */}
+                {/* <div>
                   <p className="text-sm font-bold text-slate-900">Certified</p>
                   <p className="text-xs text-slate-600">Medical Experts</p>
-                </div>
+                </div> */}
               </motion.div>
 
               <motion.div
@@ -164,13 +164,13 @@ export function Hero() {
                 transition={{ duration: 5, repeat: Infinity, delay: 1 }}
                 className="absolute top-8 right-8 glass-card rounded-2xl p-4 flex items-center gap-4"
               >
-                <div className="w-12 h-12 rounded-full bg-medical-100 flex items-center justify-center text-medical-600">
+                {/* <div className="w-12 h-12 rounded-full bg-medical-100 flex items-center justify-center text-medical-600">
                   <Clock className="w-6 h-6" />
-                </div>
-                <div>
+                </div> */}
+                {/* <div>
                   <p className="text-sm font-bold text-slate-900">Fast</p>
                   <p className="text-xs text-slate-600">Recovery</p>
-                </div>
+                </div> */}
               </motion.div>
             </div>
           </motion.div>
