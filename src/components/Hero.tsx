@@ -1,29 +1,40 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useRef } from "react";
 import { motion } from "motion/react";
-import { Calendar, ArrowRight, Activity, Shield, Clock } from "lucide-react";
-
-// ✅ Import local images
-import hero1 from "../assests/JA_HERO_LOCATION.jpeg";
-import hero2 from "../assests/JA_HERO_LOCATION_1.jpg";
-import hero3 from "../assests/JA_HERO_HOSPITAL_1.jpeg";
-import hero4 from "../assests/JA_HERO_HOSPITAL_2.jpeg";
-import hero5 from "../assests/JA_HERO_HOSPITAL_3.jpeg";
+import {
+  Calendar,
+  ArrowRight,
+  Activity,
+  Shield,
+  Clock,
+  Play,
+  Pause,
+  Volume2,
+  VolumeX,
+} from "lucide-react";
+const heroVideo = new URL("../assests/JA_hero_video.mp4", import.meta.url).href;
 
 export function Hero() {
-  // ✅ Image array
-  const images = [hero1, hero2, hero3, hero4, hero5];
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const [isPlaying, setIsPlaying] = useState(true);
+  const [isMuted, setIsMuted] = useState(true);
 
-  // ✅ State for slider
-  const [currentIndex, setCurrentIndex] = useState(0);
+  const togglePlayPause = () => {
+    if (videoRef.current) {
+      if (isPlaying) {
+        videoRef.current.pause();
+      } else {
+        videoRef.current.play();
+      }
+      setIsPlaying(!isPlaying);
+    }
+  };
 
-  // ✅ Auto slide effect
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setCurrentIndex((prev) => (prev + 1) % images.length);
-    }, 3000);
-
-    return () => clearInterval(interval);
-  }, []);
+  const toggleMute = () => {
+    if (videoRef.current) {
+      videoRef.current.muted = !isMuted;
+      setIsMuted(!isMuted);
+    }
+  };
 
   return (
     <section
@@ -128,53 +139,70 @@ export function Hero() {
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.8, delay: 0.2, ease: "easeOut" }}
-            className="relative lg:ml-auto w-full max-w-lg mx-auto"
+            className="relative lg:ml-auto w-full max-w-4xl mx-auto"
           >
-            <div className="relative rounded-[2.5rem] overflow-hidden aspect-[4/5] shadow-2xl shadow-medical-900/20 border-8 border-white">
-              {/* ✅ Auto Sliding Image */}
-              <motion.img
-                key={currentIndex}
-                src={images[currentIndex]}
-                alt="Hospital Facility"
-                className="w-full h-full object-cover"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ duration: 0.8 }}
-              />
-
-              <div className="absolute inset-0 bg-gradient-to-t from-medical-900/60 to-transparent"></div>
-
-              {/* Floating Badges (unchanged) */}
-              <motion.div
-                animate={{ y: [0, -10, 0] }}
-                transition={{ duration: 4, repeat: Infinity }}
-                className="absolute bottom-8 left-8 glass-card rounded-2xl p-4 flex items-center gap-4"
+            <div className="relative rounded-[3rem] overflow-hidden aspect-video shadow-2xl shadow-medical-900/30 border-8 border-white">
+              {/* ✅ Video with Play/Pause Button */}
+              <video
+                ref={videoRef}
+                className="absolute inset-0 min-w-full min-h-full object-cover"
+                poster="https://via.placeholder.com/800x450?text=Hospital+Video"
+                autoPlay
+                onPlay={() => setIsPlaying(true)}
+                onPause={() => setIsPlaying(false)}
+                muted={isMuted}
+                playsInline
               >
-                {/* <div className="w-12 h-12 rounded-full bg-green-100 flex items-center justify-center text-green-600">
-                  <Shield className="w-6 h-6" />
-                </div> */}
-                {/* <div>
-                  <p className="text-sm font-bold text-slate-900">Certified</p>
-                  <p className="text-xs text-slate-600">Medical Experts</p>
-                </div> */}
-              </motion.div>
+                <source src={heroVideo} type="video/mp4" />
+                Your browser does not support the video tag.
+              </video>
 
-              <motion.div
-                animate={{ y: [0, 10, 0] }}
-                transition={{ duration: 5, repeat: Infinity, delay: 1 }}
-                className="absolute top-8 right-8 glass-card rounded-2xl p-4 flex items-center gap-4"
+              <div className="absolute inset-0 bg-gradient-to-t from-medical-900/60 to-transparent" />
+
+              <button
+                onClick={togglePlayPause}
+                className="absolute left-1/2 top-1/2 z-20 -translate-x-1/2 -translate-y-1/2 rounded-full bg-white/90 p-4 shadow-lg transition-all duration-300 hover:bg-white"
+                aria-label={isPlaying ? "Pause video" : "Play video"}
               >
-                {/* <div className="w-12 h-12 rounded-full bg-medical-100 flex items-center justify-center text-medical-600">
-                  <Clock className="w-6 h-6" />
-                </div> */}
-                {/* <div>
-                  <p className="text-sm font-bold text-slate-900">Fast</p>
-                  <p className="text-xs text-slate-600">Recovery</p>
-                </div> */}
-              </motion.div>
+                {isPlaying ? (
+                  <Pause className="w-8 h-8 text-medical-600" />
+                ) : (
+                  <Play className="w-8 h-8 text-medical-600 ml-1" />
+                )}
+              </button>
+
+              <button
+                onClick={toggleMute}
+                className="absolute bottom-4 left-4 z-20 rounded-full bg-white/90 p-3 shadow-lg transition-colors duration-300 hover:bg-white"
+                aria-label={isMuted ? "Unmute video" : "Mute video"}
+              >
+                {isMuted ? (
+                  <VolumeX className="w-5 h-5 text-medical-600" />
+                ) : (
+                  <Volume2 className="w-5 h-5 text-medical-600" />
+                )}
+              </button>
             </div>
           </motion.div>
         </div>
+
+        {/* Cashless & Mediclaim Facility Banner */}
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+          className="mt-16 rounded-3xl bg-gradient-to-r from-medical-600 to-medical-500 p-8 md:p-12 shadow-2xl shadow-medical-600/30"
+        >
+          <div className="text-center">
+            <h3 className="text-3xl md:text-5xl font-bold text-white mb-4">
+              Cashless & Mediclaim Facility
+            </h3>
+            <p className="text-lg text-white/90 max-w-2xl mx-auto">
+              We accept all major insurance plans and provide seamless cashless
+              treatments. Your health is our priority without financial burden.
+            </p>
+          </div>
+        </motion.div>
       </div>
     </section>
   );

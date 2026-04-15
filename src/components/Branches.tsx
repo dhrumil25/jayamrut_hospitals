@@ -26,7 +26,7 @@ const branches = [
   },
   {
     id: "allergy-asthma",
-    title: "Amrut Allergy & Asthma Centre",
+    title: "Amrut Allergy & Asthma Centre For Adult And Pediatricians",
     description:
       "Advanced diagnosis and treatment for all types of allergies, asthma, and immunological conditions.",
     icon: Wind,
